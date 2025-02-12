@@ -1,4 +1,16 @@
 module.exports = {
   root: true,
-  extends: '@react-native',
+  extends: ['@react-native'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    
+    'prettier/prettier': 'warn',
+    'no-console': 'warn',
+  },
 };
