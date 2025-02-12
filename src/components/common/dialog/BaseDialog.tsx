@@ -15,6 +15,7 @@ type BaseDialogProps = {
   children: React.ReactNode;
 };
 
+
 const BaseDialog = ({title, onClose, children}: BaseDialogProps) => {
   return (
     <Animated.View 

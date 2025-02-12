@@ -46,6 +46,8 @@ const DialogContent = (props: Props & {onClose: () => void}) => {
           {props.message}
         </Text>
 
+
+        {/* todo prevent doulbe clicks */}
         <View style={styles.actions}>
           <Button
             variant={props.type === 'danger' ? 'destructive' : 'primary'}

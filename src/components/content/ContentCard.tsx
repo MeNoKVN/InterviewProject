@@ -1,5 +1,5 @@
 import { StyleSheet, Pressable, Image } from 'react-native';
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { ContentItem } from '@/types/content';
 import { View, Text } from '@/components/themed';
 import { COLORS, SPACING, BORDER_RADIUS } from '@/constants';
@@ -10,13 +10,25 @@ type Props = {
   onPress: (item: ContentItem) => void;
 };
 
-const ContentCard = ({ item, onPress }: Props) => {
-  const population = item.details.population.toLocaleString();
-  const mainCurrency = item.details.currencies[0];
+const ContentCard = memo(({ item, onPress }: Props) => {
+
+  const population = React.useMemo(() => 
+    item.details.population.toLocaleString(), 
+    [item.details.population]
+  );
+  
+  const mainCurrency = React.useMemo(() => 
+    item.details.currencies[0], 
+    [item.details.currencies]
+  );
+
+  const handlePress = useCallback(() => {
+    onPress(item);
+  }, [item, onPress]);
 
   return (
     <Pressable 
-      onPress={() => onPress(item)}
+      onPress={handlePress}
       style={({ pressed }) => [
         styles.card,
         pressed && styles.pressed
@@ -79,9 +91,21 @@ const ContentCard = ({ item, onPress }: Props) => {
       </View>
     </Pressable>
   );
-};
+}, (prevProps, nextProps) => {
 
-export default ContentCard;
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.item.title === nextProps.item.title &&
+    prevProps.item.image === nextProps.item.image &&
+    prevProps.item.details.population === nextProps.item.details.population &&
+    prevProps.item.details.region === nextProps.item.details.region &&
+    prevProps.item.details.capital === nextProps.item.details.capital &&
+    prevProps.item.details.currencies[0]?.symbol === nextProps.item.details.currencies[0]?.symbol &&
+    prevProps.item.details.timezones[0] === nextProps.item.details.timezones[0]
+  );
+});
+
+ContentCard.displayName = 'ContentCard';
 
 const styles = StyleSheet.create({
   card: {
@@ -145,3 +169,5 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   }
 });
+
+export default ContentCard;

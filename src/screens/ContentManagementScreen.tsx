@@ -8,6 +8,7 @@ import {ContentItem} from '@/types/content';
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
+  LinearTransition,
 } from 'react-native-reanimated';
 import {ScreenHeader} from '@/components/common/ScreenHeader';
 import {ListHeader} from '@/components/common/ListHeader';
@@ -61,6 +62,8 @@ const ContentManagementScreen = () => {
           onScroll={scrollHandler}
           scrollEventThrottle={16}
           ListHeaderComponent={<ListHeader title="Manage Content" />}
+          //this would probably already fry 80% of android devices
+          itemLayoutAnimation={LinearTransition}
         />
       </View>
     </Container>

@@ -1,5 +1,10 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, ActivityIndicator, View, RefreshControl} from 'react-native';
+import React, {useEffect, useCallback, useMemo} from 'react';
+import {
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  RefreshControl,
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
@@ -26,17 +31,43 @@ const ContentScreen = () => {
     },
   });
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     dispatch(fetchContent());
-  };
+  }, [dispatch]);
+
+  const handlePress = useCallback(
+    (item: ContentItem) => {
+      navigation.navigate('ContentDetails', {id: item.id});
+    },
+    [navigation],
+  );
 
   useEffect(() => {
     dispatch(fetchContent());
   }, [dispatch]);
 
-  const handlePress = (item: ContentItem) => {
-    navigation.navigate('ContentDetails', {id: item.id});
-  };
+  const rightActions = useMemo(
+    () => [
+      {
+        icon: 'search-outline',
+        onPress: () => {},
+      },
+      {
+        icon: 'filter-outline',
+        onPress: () => {},
+      },
+    ],
+    [],
+  );
+
+  const renderItem = useCallback(
+    ({item}: {item: ContentItem}) => (
+      <ContentCard item={item} onPress={handlePress} />
+    ),
+    [handlePress],
+  );
+
+  const listHeader = useMemo(() => <ListHeader title="Content" />, []);
 
   if (isLoading && !data) {
     return (
@@ -48,28 +79,14 @@ const ContentScreen = () => {
 
   return (
     <Container style={styles.container} useBottomInset={false}>
-      <ScreenHeader
-        rightActions={[
-          {
-            icon: 'search-outline',
-            onPress: () => {},
-          },
-          {
-            icon: 'filter-outline',
-            onPress: () => {},
-          },
-        ]}
-        scrollY={scrollY}
-      />
+      <ScreenHeader rightActions={rightActions as any} scrollY={scrollY} />
       <View style={styles.listContainer}>
         <Animated.FlatList
           data={data || []}
-          renderItem={({item}) => (
-            <ContentCard item={item} onPress={handlePress} />
-          )}
+          renderItem={renderItem}
           onScroll={scrollHandler}
           scrollEventThrottle={16}
-          ListHeaderComponent={<ListHeader title="Content" />}
+          ListHeaderComponent={listHeader}
           contentContainerStyle={styles.list}
           refreshControl={
             <RefreshControl
@@ -77,15 +94,32 @@ const ContentScreen = () => {
               onRefresh={handleRefresh}
               tintColor={COLORS.primary}
               colors={[COLORS.primary]}
+              progressViewOffset={10}
             />
           }
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={5}
+          windowSize={3}
+          initialNumToRender={5}
+          updateCellsBatchingPeriod={50}
+          maintainVisibleContentPosition={{
+            minIndexForVisible: 0,
+            autoscrollToTopThreshold: 10,
+          }}
+          // could also optmize further because refreshing after deleting is kinda junky probably shoudl just use use effect instead of refresh handle.
+          keyExtractor={item => item.id}
+          getItemLayout={(data, index) => ({
+            length: 120,
+            offset: 120 * index,
+            index,
+          })}
         />
       </View>
     </Container>
   );
 };
 
-export default ContentScreen;
+export default React.memo(ContentScreen);
 
 const styles = StyleSheet.create({
   container: {
