@@ -67,6 +67,8 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
+
+  //diddnt cehck for android again so might look shitty
   const getVariantStyles = () => {
     const baseStyles = Platform.select({
       ios: {
@@ -94,7 +96,8 @@ const Button: React.FC<ButtonProps> = ({
         };
       case 'destructive':
         return {
-          backgroundColor: COLORS.error,
+          backgroundColor: COLORS.primary,
+          borderRadius: BORDER_RADIUS.full,
           ...baseStyles,
         };
       case 'ghost':
@@ -120,6 +123,7 @@ const Button: React.FC<ButtonProps> = ({
       case 'ghost':
         return COLORS.textPrimary;
     }
+    return COLORS.textPrimary;
   };
 
   return (

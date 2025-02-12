@@ -1,23 +1,20 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {
-  Button,
-  Container,
-  Text,
-  ContainerView,
-  View,
-  Spacer,
-} from '@/components/themed';
+import {Button, Container, Text, View, Spacer} from '@/components/themed';
 import {SPACING} from '@/constants';
 import Hero from '@/components/welcome/Hero';
+import {useAuthNavigation} from '@/hooks/useAppNavigation';
 
 const WelcomeScreen = () => {
+  const navigation = useAuthNavigation();
   return (
     <Container style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
           <Hero />
-          <Text variant="display" color="primary">Welcome Screen</Text>
+          <Text variant="display" color="primary">
+            Welcome Screen
+          </Text>
           <Spacer size="sm" />
           <Text variant="bodyLarge" color="textSecondary">
             Welcome to the app. Please sign in to continue.
@@ -25,25 +22,23 @@ const WelcomeScreen = () => {
         </View>
 
         <View>
-          <Button 
-            variant="rounded" 
-            size="xl" 
-            fullWidth 
+          <Button
+            variant="rounded"
+            size="xl"
+            fullWidth
             color="primary"
-            onPress={() => {}}
-          >
+            onPress={() => {}}>
             <Text color="textLight" variant="button">
               Get Started
             </Text>
           </Button>
           <Spacer size="md" />
-          <Button 
-            variant="rounded" 
-            size="xl" 
-            fullWidth 
+          <Button
+            variant="rounded"
+            size="xl"
+            fullWidth
             color="secondary"
-            onPress={() => {}}
-          >
+            onPress={() => navigation.navigate('Login')}>
             <Text color="textPrimary" variant="button">
               Login
             </Text>

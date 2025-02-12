@@ -2,9 +2,10 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import WelcomeScreen from '../screens/auth/WelcomeScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
-import {headerlessScreenOptions} from './config';
+import {AuthStackParamList} from '@/types/navigation';
+import {headerlessScreenOptions, modalScreenOptions} from './config';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<AuthStackParamList>();
 
 const LoginNavigator = () => {
   return (
@@ -14,7 +15,11 @@ const LoginNavigator = () => {
         options={headerlessScreenOptions}
         component={WelcomeScreen}
       />
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={modalScreenOptions}
+      />
     </Stack.Navigator>
   );
 };

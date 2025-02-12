@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Dimensions, ViewStyle} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 import {View} from '@/components/themed';
 import Animated, {
   useAnimatedStyle,
@@ -9,8 +9,6 @@ import Animated, {
   withSequence,
 } from 'react-native-reanimated';
 import {COLORS} from '@/constants';
-
-const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const LINE_COUNT = 5;
 
 interface HeroProps {

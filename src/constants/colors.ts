@@ -14,7 +14,8 @@ export const COLORS = {
   textTertiary: '#999999',
   textLight: '#ffffff',    
   
-  border: '#f1f1f1',
+  border: '#E5E5E5',
+  borderRGB: '229, 229, 229',
   muted: '#e0e0e0',
   error: '#dc2626',
   success: '#16a34a',

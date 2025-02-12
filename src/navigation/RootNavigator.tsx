@@ -4,7 +4,7 @@ import {useAppSelector} from '../stores/hooks';
 import LoginNavigator from './LoginNavigator';
 import AuthorizedNavigator from './AuthorizedNavigator';
 import {defaultStackScreenOptions} from './config';
-import {RootStackParamList} from './types';
+import {RootStackParamList} from '@/types/navigation';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
