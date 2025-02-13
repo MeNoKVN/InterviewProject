@@ -15,7 +15,6 @@ const ContentNavigator = () => {
         component={ContentScreen}
         options={headerlessScreenOptions}
       />
-      {/* I would honestly make it a fullscreen modal but the app structure wont match lol */}
       <Stack.Screen
         name="ContentDetails"
         component={ContentDetailsScreen}

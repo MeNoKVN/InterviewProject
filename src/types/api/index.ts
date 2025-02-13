@@ -1,3 +1,7 @@
+/**
+ * Country interface
+ * @description This is picked data from the API ( doesnt include all fields )
+ */
 export interface Country {
   name: {
     common: string;

@@ -1,24 +1,16 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View } from "react-native";
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useScrollViewOffset,
-  useSharedValue,
-  SharedValue,
-} from "react-native-reanimated";
-import ParallaxHeader from "./ParallaxHeader";
-import { useContentNavigation } from "@/hooks/useAppNavigation";
-import { COLORS } from '@/constants';
+//switched to react native animated scroll view because of a bug with the reanimated scroll view
+import {Dimensions, StyleSheet, View, Animated} from 'react-native';
+import ParallaxHeader from './ParallaxHeader';
+import {useRootNavigation} from '@/hooks/useAppNavigation';
+import {COLORS} from '@/constants';
 
-const { width, height } = Dimensions.get("window");
+const {width, height} = Dimensions.get('window');
 
 interface ParallaxScrollContainerProps {
-  children: (props: { 
-    scrollRef: React.RefObject<Animated.ScrollView>, 
-    scrollY: SharedValue<number> 
+  children: (props: {
+    scrollRef: React.RefObject<any>;
+    scrollY: Animated.Value;
   }) => React.ReactNode;
   imageUrl: string;
   imageHeightFraction?: number;
@@ -37,38 +29,20 @@ const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = ({
   onShare,
   onBookmark,
 }) => {
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
-  const navigation = useContentNavigation();
-  const scrollY = useSharedValue(0);
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y;
-    },
-  });
+  const scrollRef = React.useRef<any>(null);
+  const navigation = useRootNavigation();
+  const scrollY = React.useRef(new Animated.Value(0)).current;
 
   const IMG_HEIGHT = height * imageHeightFraction;
 
-  const imageAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [-IMG_HEIGHT, 0, IMG_HEIGHT],
-            [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75]
-          ),
-        },
-        {
-          scale: interpolate(
-            scrollOffset.value,
-            [-IMG_HEIGHT, 0, IMG_HEIGHT],
-            [2, 1, 1]
-          ),
-        },
-      ],
-    };
+  const imageTranslateY = scrollY.interpolate({
+    inputRange: [-IMG_HEIGHT, 0, IMG_HEIGHT],
+    outputRange: [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75],
+  });
+
+  const imageScale = scrollY.interpolate({
+    inputRange: [-IMG_HEIGHT, 0, IMG_HEIGHT],
+    outputRange: [2, 1, 1],
   });
 
   return (
@@ -83,15 +57,26 @@ const ParallaxScrollContainer: React.FC<ParallaxScrollContainerProps> = ({
         ref={scrollRef}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        onScroll={scrollHandler}
-        scrollEnabled={scrollEnabled}
-      >
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true}
+        )}
+        scrollEnabled={scrollEnabled}>
         <Animated.Image
-          source={{ uri: imageUrl }}
-          style={[styles.image, { height: IMG_HEIGHT }, imageAnimatedStyle]}
+          source={{uri: imageUrl}}
+          style={[
+            styles.image,
+            {
+              height: IMG_HEIGHT,
+              transform: [
+                {translateY: imageTranslateY},
+                {scale: imageScale},
+              ],
+            },
+          ]}
         />
         <View style={styles.content}>
-          {children({ scrollRef, scrollY })}
+          {children({scrollRef, scrollY})}
         </View>
       </Animated.ScrollView>
     </View>
@@ -107,7 +92,7 @@ const styles = StyleSheet.create({
     width: width,
   },
   content: {
-    minHeight: height - (height / 3),
+    minHeight: height - height / 3,
     backgroundColor: COLORS.background,
   },
 });

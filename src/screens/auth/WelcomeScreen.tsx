@@ -3,12 +3,12 @@ import {StyleSheet} from 'react-native';
 import {Button, Container, Text, View, Spacer} from '@/components/themed';
 import {SPACING} from '@/constants';
 import Hero from '@/components/welcome/Hero';
-import {useAuthNavigation} from '@/hooks/useAppNavigation';
+import { useAuthNavigation } from '@/hooks/useAppNavigation';
 
 const WelcomeScreen = () => {
   const navigation = useAuthNavigation();
   return (
-    <Container style={styles.container}>
+    <Container style={styles.container} forceBottomInset>
       <View style={styles.content}>
         <View style={styles.header}>
           <Hero />

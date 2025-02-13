@@ -1,6 +1,12 @@
 import { Country } from '@/types/api';
 import { ContentItem } from '@/types/content';
 
+/**
+ * Transforms a country object into a ContentItem ( Api Type -> Content Type )
+ * @param country country object
+ * @returns ContentItem
+ */
+
 export const transformCountryToContent = (country: Country): ContentItem => ({
   id: country.name.common,
   title: country.name.official,

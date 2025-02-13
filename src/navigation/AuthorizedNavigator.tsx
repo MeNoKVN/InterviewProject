@@ -23,7 +23,7 @@ function TabBarIcon(props: {
     <Icon
       name={iconName as IconName}
       size={24}
-      style={{ marginBottom: -3}}
+      style={{ marginBottom: 0}}
       color={props.color}
     />
   );
@@ -45,7 +45,7 @@ const AuthorizedNavigator = () => {
       }}
     >
       <Tab.Screen 
-        name="ContentTab" 
+        name="Content" 
         component={ContentNavigator}
         options={{
           title: 'Home',

@@ -1,21 +1,27 @@
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { 
-  RootStackParamList, 
-  AuthStackParamList, 
-  AuthorizedStackParamList,
-  ContentStackParamList 
+import {useNavigation, NavigationProp} from '@react-navigation/native';
+import {
+  RootStackParamList,
+  AuthStackParamList,
+  ContentStackParamList,
 } from '@/types/navigation';
 
-
-//i dont think this is needed
-export const useRootNavigation = () => 
+/**
+ * Hook for root-level navigation (main app navigation)
+ * Use this for navigating between Auth and Authorized sections
+ */
+export const useRootNavigation = () =>
   useNavigation<NavigationProp<RootStackParamList>>();
 
-export const useAuthNavigation = () => 
+/**
+ * Hook for authentication flow navigation
+ * Use this for screens within the auth flow (login, signup, etc.)
+ */
+export const useAuthNavigation = () =>
   useNavigation<NavigationProp<AuthStackParamList>>();
 
-export const useAuthorizedNavigation = () => 
-  useNavigation<NavigationProp<AuthorizedStackParamList>>();
-
-export const useContentNavigation = () => 
-  useNavigation<NavigationProp<ContentStackParamList>>(); 
+/**
+ * Hook for content navigation
+ * Use this for navigating between content screens (list and details)
+ */
+export const useContentNavigation = () =>
+  useNavigation<NavigationProp<ContentStackParamList>>();

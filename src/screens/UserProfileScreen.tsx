@@ -5,15 +5,14 @@ import {useAppDispatch, useAppSelector} from '@/stores/hooks';
 import {logoutThunk} from '@/stores/auth/thunks';
 import {Container} from '@/components/themed';
 
-type Props = {};
 
-const UserProfileScreen = (props: Props) => {
+const UserProfileScreen = () => {
   const dispatch = useAppDispatch();
   const {isLoading} = useAppSelector(state => state.auth);
 
   return (
     <Container style={styles.container}>
-      <Button loading={isLoading} onPress={() => dispatch(logoutThunk())}>
+      <Button variant="primary" loading={isLoading} onPress={() => dispatch(logoutThunk())}>
         Logout
       </Button>
     </Container>

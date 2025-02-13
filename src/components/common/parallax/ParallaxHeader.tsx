@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {View, TouchableOpacity, StyleSheet, Platform} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
-import { Icon } from '@/components/themed';
-import { COLORS } from '@/constants';
+import {Icon} from '@/components/themed';
+import {COLORS} from '@/constants';
 
 interface ParallaxHeaderProps {
   onBackPress: () => void;
@@ -13,46 +13,54 @@ interface ParallaxHeaderProps {
   style?: any;
 }
 
-const ParallaxHeader: React.FC<ParallaxHeaderProps> = ({ 
-  onBackPress, 
-  onSharePress, 
-  onBookmarkPress, 
+const ParallaxHeader: React.FC<ParallaxHeaderProps> = ({
+  onBackPress,
+  onSharePress,
+  onBookmarkPress,
   isBookmarked,
-  style
+  style,
 }) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <Animated.View style={[styles.headerContainer, { top: insets.top }, style]}>
-      <TouchableOpacity 
-        onPress={onBackPress} 
+    <Animated.View
+      style={[
+        styles.headerContainer,
+        {top: Platform.OS === 'ios' ? insets.top : 4},
+        style,
+      ]}>
+      <TouchableOpacity
+        onPress={onBackPress}
         style={[styles.iconButton, styles.leftButton]}
-        activeOpacity={0.9}
-      >
-        <View style={[styles.iconCircle, { backgroundColor: COLORS.background }]}>
-          <Icon name="chevron-back-outline" size={20} color={COLORS.textPrimary} />
+        activeOpacity={0.9}>
+        <View style={[styles.iconCircle, {backgroundColor: COLORS.background}]}>
+          <Icon
+            name="chevron-back-outline"
+            size={20}
+            color={COLORS.textPrimary}
+          />
         </View>
       </TouchableOpacity>
 
       <View style={styles.rightButtons}>
-        <TouchableOpacity 
-          onPress={onSharePress} 
+        <TouchableOpacity
+          onPress={onSharePress}
           style={styles.iconButton}
-          activeOpacity={0.85}
-        >
-          <View style={[styles.iconCircle, { backgroundColor: COLORS.background }]}>
+          activeOpacity={0.85}>
+          <View
+            style={[styles.iconCircle, {backgroundColor: COLORS.background}]}>
             <Icon name="share-outline" size={20} color={COLORS.textPrimary} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          onPress={onBookmarkPress} 
+        <TouchableOpacity
+          onPress={onBookmarkPress}
           style={styles.iconButton}
-          activeOpacity={0.85}
-        >
-          <View style={[styles.iconCircle, { backgroundColor: COLORS.background }]}>
+          activeOpacity={0.85}>
+          <View
+            style={[styles.iconCircle, {backgroundColor: COLORS.background}]}>
             <Icon
-              name={isBookmarked ? "heart" : "heart-outline"}
+              name={isBookmarked ? 'heart' : 'heart-outline'}
               size={20}
               color={isBookmarked ? COLORS.primary : COLORS.textPrimary}
             />
@@ -96,12 +104,13 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
       },
       android: {
         elevation: 4,
+        overflow: 'hidden',
       },
     }),
   },

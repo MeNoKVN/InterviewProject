@@ -1,5 +1,4 @@
 
-//inter doesnt work its fine. 
 export const TYPOGRAPHY = {
   display: {
     fontSize: 44,

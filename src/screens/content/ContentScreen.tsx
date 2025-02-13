@@ -1,18 +1,22 @@
 import React, {useEffect, useCallback, useMemo} from 'react';
-import {StyleSheet, ActivityIndicator, View, RefreshControl} from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedScrollHandler,
-} from 'react-native-reanimated';
+import {
+  StyleSheet,
+  ActivityIndicator,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
+import {useSharedValue} from 'react-native-reanimated';
 import ContentCard from '@/components/content/ContentCard';
 import {useAppDispatch, useAppSelector} from '@/stores/hooks';
 import {fetchContent} from '@/stores/content/thunks';
 import {useContentNavigation} from '@/hooks/useAppNavigation';
 import {ContentItem} from '@/types/content';
 import {COLORS, SPACING} from '@/constants';
-import {Container} from '@/components/themed';
+import {Container, View} from '@/components/themed';
 import {ScreenHeader} from '@/components/common/ScreenHeader';
 import {ListHeader} from '@/components/common/ListHeader';
+import {FlashList} from '@shopify/flash-list';
+import {IconName} from '@/components/themed/Icon';
 
 const ContentScreen = () => {
   const dispatch = useAppDispatch();
@@ -20,38 +24,45 @@ const ContentScreen = () => {
   const {data, isLoading} = useAppSelector(state => state.content);
   const scrollY = useSharedValue(0);
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: event => {
-      scrollY.value = event.contentOffset.y;
-    },
-  });
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    scrollY.value = event.nativeEvent.contentOffset.y;
+  };
 
   const handleRefresh = useCallback(() => {
     dispatch(fetchContent());
   }, [dispatch]);
 
-  const handlePress = useCallback((item: ContentItem) => {
-    navigation.navigate('ContentDetails', {id: item.id});
-  }, [navigation]);
+  const handlePress = useCallback(
+    (item: ContentItem) => {
+      navigation.navigate('ContentDetails', {id: item.id});
+    },
+    [navigation],
+  );
 
   useEffect(() => {
     dispatch(fetchContent());
   }, [dispatch]);
 
-  const rightActions = useMemo(() => [
-    {
-      icon: 'search-outline',
-      onPress: () => {},
-    },
-    {
-      icon: 'filter-outline',
-      onPress: () => {},
-    },
-  ], []);
+  const rightActions = useMemo(
+    () => [
+      {
+        icon: 'search-outline' as IconName,
+        onPress: () => {},
+      },
+      {
+        icon: 'filter-outline' as IconName,
+        onPress: () => {},
+      },
+    ],
+    [],
+  );
 
-  const renderItem = useCallback(({item}: {item: ContentItem}) => (
-    <ContentCard item={item} onPress={handlePress} />
-  ), [handlePress]);
+  const renderItem = useCallback(
+    ({item}: {item: ContentItem}) => (
+      <ContentCard item={item} onPress={handlePress} />
+    ),
+    [handlePress],
+  );
 
   const listHeader = useMemo(() => <ListHeader title="Content" />, []);
 
@@ -65,33 +76,19 @@ const ContentScreen = () => {
 
   return (
     <Container style={styles.container} useBottomInset={false}>
-      <ScreenHeader
-        rightActions={rightActions as any}
-        scrollY={scrollY}
-      />
-  
+      <ScreenHeader rightActions={rightActions} scrollY={scrollY} />
+
       <View style={styles.listContainer}>
-        <Animated.FlatList
+        <FlashList
           data={data || []}
           renderItem={renderItem}
-          onScroll={scrollHandler}
+          estimatedItemSize={100}
+          onScroll={handleScroll}
           scrollEventThrottle={16}
           ListHeaderComponent={listHeader}
           contentContainerStyle={styles.list}
-          refreshControl={
-            // this is pretty shitty probably just use use effect
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={handleRefresh}
-              tintColor={COLORS.primary}
-              colors={[COLORS.primary]}
-              progressViewOffset={10}
-            />
-          }
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
+          refreshing={isLoading}
+          onRefresh={handleRefresh}
           keyExtractor={item => item.id}
         />
       </View>

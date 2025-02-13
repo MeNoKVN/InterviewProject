@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Pressable } from 'react-native';
+import { StyleSheet, View, Pressable, Platform } from 'react-native';
 import { COLORS, SPACING } from '@/constants';
 import Icon from '@/components/themed/Icon';
 import { IconName } from '@/components/themed/Icon';
-import Animated, { useAnimatedStyle, interpolate } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, interpolate, SharedValue } from 'react-native-reanimated';
 
 type HeaderAction = {
   icon: IconName;
@@ -14,7 +14,7 @@ type HeaderAction = {
 type Props = {
   leftActions?: HeaderAction[];
   rightActions?: HeaderAction[];
-  scrollY?: Animated.SharedValue<number>;
+  scrollY?: SharedValue<number>;
 };
 
 export const ScreenHeader = ({ leftActions = [], rightActions = [], scrollY }: Props) => {
@@ -73,6 +73,10 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: SPACING.md,
     paddingBottom: SPACING.sm,
+    paddingTop: Platform.select({
+      android: SPACING.sm,
+      ios: 0,
+    }),
     borderBottomWidth: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',

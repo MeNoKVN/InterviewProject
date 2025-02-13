@@ -7,6 +7,12 @@ const MOCK_USER: UserProfile = {
   username: 'TestUser',
 };
 
+/**
+ * Mock authentication service
+ * @description This is a mock authentication service that simulates a real API call
+ * @returns Promise<UserProfile> mock user profile
+ * @throws Error if the credentials are invalid
+ */
 
 export const authService = {
   async login(email: string, password: string): Promise<UserProfile> {

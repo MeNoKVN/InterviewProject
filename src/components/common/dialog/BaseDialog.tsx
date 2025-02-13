@@ -5,7 +5,7 @@ import Animated, {
   FadeIn,
   FadeOut,
   SlideInDown,
-  SlideOutUp,
+  SlideOutDown,
 } from 'react-native-reanimated';
 import DialogHeader from './Header';
 
@@ -15,17 +15,16 @@ type BaseDialogProps = {
   children: React.ReactNode;
 };
 
-
 const BaseDialog = ({title, onClose, children}: BaseDialogProps) => {
   return (
     <Animated.View 
-      entering={FadeIn.duration(100)}
-      exiting={FadeOut.duration(150)}
+      entering={FadeIn}
+      exiting={FadeOut}
       style={StyleSheet.absoluteFill}>
       <Pressable style={styles.overlay} onPress={onClose}>
         <Animated.View 
-          entering={SlideInDown.duration(100).springify().damping(20)}
-          exiting={SlideOutUp.duration(200)}
+          entering={SlideInDown}
+          exiting={SlideOutDown}
           style={styles.container}>
           <DialogHeader title={title} onClose={onClose} />
           {children}
@@ -60,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BaseDialog; 
+export default BaseDialog;

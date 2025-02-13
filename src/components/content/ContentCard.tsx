@@ -11,20 +11,12 @@ type Props = {
 };
 
 const ContentCard = memo(({ item, onPress }: Props) => {
-
-  const population = React.useMemo(() => 
-    item.details.population.toLocaleString(), 
-    [item.details.population]
-  );
-  
-  const mainCurrency = React.useMemo(() => 
-    item.details.currencies[0], 
-    [item.details.currencies]
-  );
-
   const handlePress = useCallback(() => {
     onPress(item);
   }, [item, onPress]);
+
+  const population = item.details.population.toLocaleString();
+  const mainCurrency = item.details.currencies[0];
 
   return (
     <Pressable 
@@ -92,17 +84,7 @@ const ContentCard = memo(({ item, onPress }: Props) => {
     </Pressable>
   );
 }, (prevProps, nextProps) => {
-
-  return (
-    prevProps.item.id === nextProps.item.id &&
-    prevProps.item.title === nextProps.item.title &&
-    prevProps.item.image === nextProps.item.image &&
-    prevProps.item.details.population === nextProps.item.details.population &&
-    prevProps.item.details.region === nextProps.item.details.region &&
-    prevProps.item.details.capital === nextProps.item.details.capital &&
-    prevProps.item.details.currencies[0]?.symbol === nextProps.item.details.currencies[0]?.symbol &&
-    prevProps.item.details.timezones[0] === nextProps.item.details.timezones[0]
-  );
+  return prevProps.item.id === nextProps.item.id;
 });
 
 ContentCard.displayName = 'ContentCard';

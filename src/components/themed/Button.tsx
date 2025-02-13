@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import {
   TouchableOpacity,
   ActivityIndicator,
@@ -8,7 +8,7 @@ import {
   Platform,
   View,
 } from 'react-native';
-import { COLORS, SPACING, BORDER_RADIUS } from '@/constants';
+import {COLORS, SPACING, BORDER_RADIUS} from '@/constants';
 import Text from './Text';
 
 interface ButtonProps {
@@ -67,18 +67,18 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
-
-  //diddnt cehck for android again so might look shitty
   const getVariantStyles = () => {
     const baseStyles = Platform.select({
       ios: {
-        shadowColor: variant === 'primary' ? (color ? COLORS[color] : COLORS.primary) : '#000',
-        shadowOffset: { width: 0, height: 1 },
+        shadowColor:
+          variant === 'primary'
+            ? color
+              ? COLORS[color]
+              : COLORS.primary
+            : '#000',
+        shadowOffset: {width: 0, height: 1},
         shadowOpacity: variant === 'primary' ? 0.2 : 0.04,
         shadowRadius: 2,
-      },
-      android: {
-        elevation: variant === 'primary' ? 2 : 1,
       },
     });
 
@@ -129,7 +129,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <Animated.View
       style={[
-        !disabled && { transform: [{ scale: scaleAnim }] },
+        !disabled && {transform: [{scale: scaleAnim}]},
         fullWidth && styles.fullWidth,
       ]}>
       <TouchableOpacity
@@ -139,7 +139,7 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled || loading}
         style={[
           styles.button,
-          { height: getContentHeight() },
+          {height: getContentHeight()},
           getVariantStyles(),
           getSizeStyles(size),
           style,
@@ -151,7 +151,7 @@ const Button: React.FC<ButtonProps> = ({
             variant="button"
             style={[
               styles.text,
-              { color: getTextColor() },
+              {color: getTextColor()},
               loading && styles.hiddenText,
             ]}>
             {children}
