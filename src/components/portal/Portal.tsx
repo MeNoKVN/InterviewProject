@@ -7,7 +7,6 @@ type PortalContextType = {
 };
 
 
-//could just use gorhoms portal
 const PortalContext = createContext<PortalContextType | null>(null);
 
 export const PortalProvider = forwardRef(({children}: {children: React.ReactNode}, ref) => {

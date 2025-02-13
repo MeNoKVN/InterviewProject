@@ -23,20 +23,30 @@ export const initializeDialog = (ref: any) => {
 
 const DialogContent = (props: Props & {onClose: () => void}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDebouncing, setIsDebouncing] = useState(false);
 
   const handleConfirm = async () => {
+    if (isDebouncing || isLoading) return;
+    
+    setIsDebouncing(true);
     setIsLoading(true);
+    
     try {
       await props.onConfirm();
       props.onClose();
     } finally {
       setIsLoading(false);
+      //delay debounce to prevent double clicks
+      setTimeout(() => setIsDebouncing(false), 500);
     }
   };
 
   const handleCancel = () => {
+    if (isDebouncing || isLoading) return;
+    setIsDebouncing(true);
     props.onCancel?.();
     props.onClose();
+    setTimeout(() => setIsDebouncing(false), 500);
   };
 
   return (
@@ -47,7 +57,6 @@ const DialogContent = (props: Props & {onClose: () => void}) => {
         </Text>
 
 
-        {/* todo prevent doulbe clicks */}
         <View style={styles.actions}>
           <Button
             variant={props.type === 'danger' ? 'destructive' : 'primary'}
